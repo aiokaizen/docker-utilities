@@ -3,7 +3,7 @@
 
 ## Usage
 ### Build and run the container
-docker build -t ubuntu-ssh-gpg .
+docker build -t ubuntu-ssh-pgp .
 
 ### Run the container
 docker run -d -p 2222:22 --name ubuntu_gpg_container ubuntu-ssh-gpg
