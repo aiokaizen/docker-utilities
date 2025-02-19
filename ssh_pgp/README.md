@@ -2,31 +2,38 @@
 
 
 ## Usage
+
 ### Build and run the container
+
 docker build -t ubuntu-ssh-pgp .
 
 ### Run the container
-docker run -d -p 2222:22 --name ubuntu_gpg_container ubuntu-ssh-gpg
 
+docker run -d -p 2222:22 --name ubuntu_gpg_container ubuntu-ssh-gpg
 
 - user: sshuser
 - password: admin@123
 
 
 ## PGP Commands
-generate a key 
+
+### generate a key 
+
 gpg --full-generate-key
 gpg --armor --export <key-id> > hps_public_key.asc
 
 gpg --armor --export-secret-keys > private.asc
 
-sign file
+### sign file
+
 gpg --armor --detach-sign <file-to-sign>
 
-verify the sign file 
+### verify the sign file 
+
 gpg --verify example.txt.asc example.txt
 
-encryption commandes
+### encryption commandes
+
 gpg --import hps_public_key.asc 
 gpg --list-keys
 gpg --encrypt --recipient "hps_user" hello.txt 
@@ -34,15 +41,30 @@ gpg --encrypt --recipient "hps_user" hello.txt
 gpg --encrypt --sign --recipient "hello_test" --default-key "hi_test" file.txt
 
 
-decrypt commandes: 
+### decrypt commandes: 
 
 gpg --pinentry-mode loopback --passphrase 'dzadzadzadazzda' --output hello.txt --decrypt hello.txt.gpg
 
 
+### delete public key
 
-
-delete public key
 gpg --delete-key <key-id>
 
-delete private key 
+
+### delete private key 
+
 gpg --delete-secret-key <key-id>
+
+
+### delete private and public key
+
+gpg --delete-secret-and-public-key <key-id>
+
+
+### delete all private and public keys
+
+```bash
+gpg --list-keys --with-colons | grep '^fpr' | cut -d':' -f10 > keys.list.tmp
+gpg --batch --delete-secret-and-public-key --yes $(cat keys.list.tmp)
+rm -f keys.list.tmp
+```
