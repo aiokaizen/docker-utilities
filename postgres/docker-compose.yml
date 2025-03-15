@@ -4,21 +4,30 @@ version: '3.9'
 services:
 
   db:
-    # image: postgres:17.4
     build: .
     restart: always
     # set shared memory limit when using docker-compose
     shm_size: 128mb
+    ports:
+      - 5433:5432
     env_file:
       - .env
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - pg_network
 
   adminer:
     image: adminer
     restart: always
     ports:
       - 8080:8080
+    networks:
+      - pg_network
 
 volumes:
   pgdata:
+
+networks:
+  pg_network:
+    driver: bridge
